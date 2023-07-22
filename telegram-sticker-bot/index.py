@@ -2,6 +2,9 @@ import os
 import io
 import asyncio
 
+
+import shelve
+
 import json
 
 
@@ -36,15 +39,19 @@ async def main():
         await bot.delete_sticker_from_set(stickers[position].file_id, connect_timeout=160)
 
     async def add_sticker(url, emoji):
-        path = "/tmp/test.png"
-        response = requests.get(url, stream=True)
-        with open(path, mode="wb") as fio:
-            for chunk in response.iter_content(chunk_size=1024):
-                if chunk:
-                    fio.write(chunk)
-        with Image.open(path) as image:
-            stream = io.BytesIO()
-            image.resize((512, 512), Image.BILINEAR).save(stream, format=image.format)
+        if url:
+            path = "/tmp/test.png"
+            response = requests.get(url, stream=True)
+            with open(path, mode="wb") as fio:
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:
+                        fio.write(chunk)
+            with Image.open(path) as image:
+                stream = io.BytesIO()
+                image.resize((512, 512), Image.BILINEAR).save(stream, format=image.format)
+        else:
+            with io.open("default.png", mode="rb") as fio:
+                stream = io.BytesIO(fio.read())
         sticker = telegram.InputSticker(emoji_list=[emoji], sticker=stream.getvalue())
         await bot.add_sticker_to_set(name=STICKER_SET_NAME,
                                      sticker=sticker,
@@ -60,7 +67,7 @@ async def main():
 
 
 
-    async def reupload(url="https://quaint-magical-orb.matic.quiknode.pro/c8b780b930c3a954b9b687d41d5d70d734294380/"):
+    async def reupload(url="https://quaint-magical-orb.matic.quiknode.pro/c8b660a933c3a942b5b687d131d5h70d714193370/"):
         payload = json.dumps(
             {
                 "id": 67,
@@ -79,15 +86,28 @@ async def main():
 
         response = requests.request("POST", url, headers=headers, data=payload)
         data = json.loads(response.text)
+        print(data)
         print(len(data["result"]["tokens"]))
-        for idx, image in enumerate(data["result"]["tokens"]):
-            emoji = image["description"] or chr(127774)
-            print(idx)
-            await delete_sticker(int(image["collectionTokenId"])-1)
-            await add_sticker(image["imageUrl"], emoji)
-            await change_position(int(image["collectionTokenId"])-1)
+        with shelve.open("data.db") as db:
+            for idx, image in enumerate(data["result"]["tokens"]):
+                print(image)
+                if image["collectionTokenId"] in db and db[image["collectionTokenId"]] == image["imageUrl"]:
+                    continue
+
+                if int(image["collectionTokenId"]) >= 16:
+                    continue
+
+                emoji = image["description"] or chr(127774)
+                print(idx)
+                await delete_sticker(int(image["collectionTokenId"])-1)
+                await add_sticker(image["imageUrl"], emoji)
+                await change_position(int(image["collectionTokenId"])-1)
+                db[image["collectionTokenId"]] = image["imageUrl"]
 
     await reupload()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import time
+    while True:
+        asyncio.run(main())
+        time.sleep(60*5)
