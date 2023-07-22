@@ -67,7 +67,7 @@ async def main():
 
 
 
-    async def reupload(url="os.environ["QUICKNODE_NODE"]"):
+    async def reupload(url=os.environ["QUICKNODE_NODE"]):
         payload = json.dumps(
             {
                 "id": 67,
