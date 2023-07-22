@@ -30,7 +30,7 @@ app.get('/get-all-ntfs', (req, res) => {
 	  "jsonrpc": "2.0",
 	  "method": "qn_fetchNFTsByCollection",
 	  "params": [{
-	    "collection": "0xD3cb7CC59e586869a1cc648Eb044682c0124Bc6a",
+	    "collection": "0x2B993840c63b3e6487B283e8c65ddCE84D1EB4BD",
 	    "page": 1,
 	    "perPage": 10
 	  }]
@@ -43,7 +43,7 @@ app.get('/get-all-ntfs', (req, res) => {
 	  redirect: 'follow'
 	};
 
-	fetch(`https://quaint-magical-orb.matic.quiknode.pro/${process.env.QUICKNODE_KEY}/`, requestOptions)
+	fetch(`https://multi-thrilling-sheet.matic.quiknode.pro/${process.env.QUICKNODE_KEY}/`, requestOptions)
 	  .then(response => response.text())
 	  .then((result) => {
 	  	console.log('result from quick node', result);
