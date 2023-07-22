@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Grid, Paper } from '@mui/material';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import PlatformItem from './components/PlatformItem';
-import StikerPackImage from '../../assets/Stikers.png';
+import StikerPackImage from '../../assets/Stikers3.png';
 import DaoImage from '../../assets/dao.png';
 import Action from '../../assets/action.png';
 import Schema from '../../assets/schema.png';
