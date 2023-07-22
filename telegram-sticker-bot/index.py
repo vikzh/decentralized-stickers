@@ -67,7 +67,7 @@ async def main():
 
 
 
-    async def reupload(url="https://quaint-magical-orb.matic.quiknode.pro/c8b660a933c3a942b5b687d131d5h70d714193370/"):
+    async def reupload(url="os.environ["QUICKNODE_NODE"]"):
         payload = json.dumps(
             {
                 "id": 67,
