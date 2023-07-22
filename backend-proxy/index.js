@@ -1,7 +1,12 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-var cors = require('cors');
-require('dotenv').config()
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+// const express = require('express');
+// const bodyParser = require('body-parser');
+// var cors = require('cors');
+import { Headers } from 'node-fetch';
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
 
 
