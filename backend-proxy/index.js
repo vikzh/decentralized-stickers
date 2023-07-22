@@ -6,6 +6,8 @@ import cors from 'cors';
 // var cors = require('cors');
 import { Headers } from 'node-fetch';
 import dotenv from 'dotenv';
+import fetch from "node-fetch";
+
 dotenv.config();
 const app = express();
 
