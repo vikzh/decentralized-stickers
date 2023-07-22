@@ -1,26 +1,3 @@
-import os
-import io
-import asyncio
-
-
-import telegram
-import requests
-from PIL import Image
-
-import dotenv
-
-
-dotenv.load_dotenv()
-
-BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
-
-STICKER_SET_NAME = "crypto_stickers_by_cryptopicbot"
-STICKER_SET_TITLE = "Stickers based on cryptocurrencies"
-
-
-STICKER_SET_OWNER_ID = os.environ["STICKER_SET_OWNER_ID"]
-
-
 async def main():
     bot = telegram.Bot(token=BOT_TOKEN)
 
@@ -52,12 +29,17 @@ async def main():
                                      read_timeout=120,
                                      write_timeout=120)
 
+    async def change_position(new_position):
+        stickers = await list_stickers()
+        await bot.set_sticker_position_in_set(position=new_position, sticker=stickers[-1].file_id, connect_timeout=120)
+
     stickers = await list_stickers()
     print(len(stickers))
     await delete_sticker(0)
     stickers = await list_stickers()
     print(len(stickers))
-    await add_sticker("https://cards2.collecttrumpcards.com/cards/3627c140e.jpg", "🐶")
+    await add_sticker(" https://cards2.collecttrumpcards.com/cards/3627c140e.jpg", "🐶")
+    await change_position(0)
 
 if __name__ == "__main__":
     asyncio.run(main())
