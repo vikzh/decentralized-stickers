@@ -1,3 +1,28 @@
+import os
+import io
+import asyncio
+
+import json
+
+
+import telegram
+import requests
+from PIL import Image
+
+import dotenv
+
+
+dotenv.load_dotenv()
+
+BOT_TOKEN = os.environ["TELEGRAM_BOT_TOKEN"]
+
+STICKER_SET_NAME = "crypto_stickers_by_cryptopicbot"
+STICKER_SET_TITLE = "Stickers based on cryptocurrencies"
+
+
+STICKER_SET_OWNER_ID = os.environ["STICKER_SET_OWNER_ID"]
+
+
 async def main():
     bot = telegram.Bot(token=BOT_TOKEN)
 
@@ -33,13 +58,36 @@ async def main():
         stickers = await list_stickers()
         await bot.set_sticker_position_in_set(position=new_position, sticker=stickers[-1].file_id, connect_timeout=120)
 
-    stickers = await list_stickers()
-    print(len(stickers))
-    await delete_sticker(0)
-    stickers = await list_stickers()
-    print(len(stickers))
-    await add_sticker(" https://cards2.collecttrumpcards.com/cards/3627c140e.jpg", "🐶")
-    await change_position(0)
+
+
+    async def reupload(url="https://quaint-magical-orb.matic.quiknode.pro/c8b780b930c3a954b9b687d41d5d70d734294380/"):
+        payload = json.dumps(
+            {
+                "id": 67,
+                "jsonrpc": "2.0",
+                "method": "qn_fetchNFTsByCollection",
+                "params": [
+                    {
+                        "collection": "0xD3cb7CC59e586869a1cc648Eb044682c0124Bc6a",
+                        "page": 1,
+                        "perPage": 100,
+                    }
+                ],
+            }
+        )
+        headers = {"Content-Type": "application/json"}
+
+        response = requests.request("POST", url, headers=headers, data=payload)
+        data = json.loads(response.text)
+        print(len(data["result"]["tokens"]))
+        for idx, image in enumerate(data["result"]["tokens"]):
+            emoji = image["description"] or chr(127774)
+            print(idx)
+            await delete_sticker(int(image["collectionTokenId"])-1)
+            await add_sticker(image["imageUrl"], emoji)
+            await change_position(int(image["collectionTokenId"])-1)
+
+    await reupload()
 
 if __name__ == "__main__":
     asyncio.run(main())
