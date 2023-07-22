@@ -17,6 +17,7 @@ const App = () => {
       <Container maxWidth="lg" className="d-flex flex-column align-items-center justify-content-center">
         <Header handleStickersClick={handleStickersClick} featuresStickersClick={featuresStickersClick} />
         <TitleImage />
+        <h3 className="mt-5"><a href="https://t.me/addstickers/crypto_stickers_by_decentralized_stickers_bot">Click to Add Sticker Pack to the Telegram</a></h3>
         <Platforms />
         <StickerPack stickerPacks={stickerPacks} />
       </Container>

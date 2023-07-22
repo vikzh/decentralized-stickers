@@ -15,7 +15,7 @@ const StickerItem = ({id, stikerInfo}) => {
       {stikerInfo.description === '' ? '💩'  : stikerInfo.description}
     </div>
     <div>{`${address.slice(0, 8)}...${address.slice(-8)}`}</div>
-    <div>        <button><a href="https://app.aragon.org/#/daos/polygon/0x16f9891b5f290cf1aacbdaea3c0c8328480201a6/governance/new-proposal">
+    <div>        <button><a href="https://staging-app.aragon.org/#/daos/polygon/0x50a975fb889c64a8552ceba10bc4a2a3d33e6a47/dashboard">
       Create a Proposal
         </a></button></div>
   </div>
